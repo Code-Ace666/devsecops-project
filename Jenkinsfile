@@ -10,10 +10,11 @@ pipeline {
         }
 
         stage('SAST Scan - Semgrep') {
-            steps {
-                sh 'semgrep scan --config auto'
-            }
-        }
+    steps {
+        // This spins up a temporary Semgrep container, runs the scan, and deletes itself
+        sh 'docker run --rm -v "${WORKSPACE}:/src" semgrep/semgrep semgrep scan --config auto'
+    }
+}
 
         stage('Build Docker Image') {
             steps {
