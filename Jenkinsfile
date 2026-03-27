@@ -33,8 +33,13 @@ pipeline {
 
         stage('Run Container') {
             steps {
-                sh 'docker run -d -p 5000:5000 devsecops-app'
+                // Ignore errors if the container doesn't exist yet (|| true)
+                sh 'docker rm -f my-devsecops-app || true'
+
+                // Run the new container with a specific name
+                sh 'docker run -d --name my-devsecops-app -p 5000:5000 devsecops-app'
             }
         }
+        
     }
 }
