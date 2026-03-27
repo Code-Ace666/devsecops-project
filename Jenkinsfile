@@ -25,10 +25,11 @@ pipeline {
         }
 
         stage('Container Scan - Trivy') {
-            steps {
-                sh 'trivy image devsecops-app'
-            }
-        }
+    steps {
+        // Run Trivy inside a container, giving it access to the server's Docker daemon so it can see your newly built image
+        sh 'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image devsecops-app'
+    }
+}
 
         stage('Run Container') {
             steps {
